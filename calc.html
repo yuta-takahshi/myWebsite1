@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ACCESS｜KISSA official website</title>
+  <meta name="description" content="カフェ「KISSA」のアクセスマップと問い合わせフォームが掲載されたページです。">
+  <meta name="viewport" content="width=device-width">
+  <script src="./js/toggle-menu.js"></script>
+  <link href="./css/common.css" rel="stylesheet">
+  <link href="./css/calc.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- headerここから -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="header-logo" href="./index.html">
+        <img src="./images/common/logo-header.png" alt="KISSA">
+      </a>
+      <button class="toggle-menu-button"></button>
+      <div class="header-site-menu">
+        <nav class="site-menu">
+          <ul>
+ <li><a href="./concept.html">コンセプト</a></li>
+        <li><a href="./menu.html">事業内容</a></li>
+        <li><a href="./shop.html">施工事例</a></li>
+        <li><a href="./access.html">アクセス・お問い合わせ</a></li>
+        <li><a href="./gaiyo.html">会社概要</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!-- headerここまで -->
+
+ <!-- mainここから -->
+<main class="main">
+  <div class="title">
+    <h1>ローン計算</h1>
+    <p>Loan Simulator</p>
+  </div>
+
+  <div class="contact" id="contact">
+    <h2>ローン計算電卓機能</h2>
+    <form id="loan-form" onsubmit="calculateLoan(event)">
+      <dl class="form-area">
+        <dt><span class="required">お借り入れ額</span><br><small>（50万円以上9,000万円以下でご入力ください）</small></dt>
+        <dd><input class="input-text" type="number" name="amount" required> 万円（半角数字）</dd>
+
+        <dt>内ボーナス返済額<br><small>（任意入力）</small></dt>
+        <dd><input class="input-text" type="number" name="bonus"> 万円（半角数字）</dd>
+
+        <dt><span class="required">返済期間</span><br><small>（1年以上50年以下でご入力ください）</small></dt>
+        <dd><input class="input-text" type="number" name="years" required> 年（半角数字）</dd>
+
+        <dt><span class="required">金利（変動金利）</span><br><small>（例：年2.75％ →「2」「75」と入力）</small></dt>
+        <dd>
+          <input class="input-text" type="number" name="interest1" style="width:60px;"> ．
+          <input class="input-text" type="number" name="interest2" style="width:60px;"> ％（半角数字）
+        </dd>
+
+        <!-- ▼ 計算結果表示欄 -->
+        <dt>●毎月のご返済額</dt>
+        <dd>
+          <input class="input-text" type="text" name="monthlyResult" readonly> 円（年12回）
+        </dd>
+
+        <dt>●ボーナス時ご返済額</dt>
+        <dd>
+          <input class="input-text" type="text" name="bonusResult" readonly> 円（年2回）
+        </dd>
+      </dl>
+
+      <p class="confirm-text">下記のボタンを押すと、月々の返済額とボーナス時返済額が表示されます。</p>
+      <button class="submit-button" type="submit">計算する</button>
+      <button class="submit-button" type="button" onclick="clearLoan()">入力をクリアする</button>
+    </form>
+  </div>
+</main>
+<!-- mainここまで -->
+
+<!-- JavaScriptここから -->
+<script>
+function calculateLoan(event) {
+  event.preventDefault();
+  const form = event.target;
+
+  const amount = parseFloat(form.amount.value) * 10000;
+  const bonus = form.bonus.value ? parseFloat(form.bonus.value) * 10000 : 0;
+  const years = parseInt(form.years.value);
+  const interest1 = parseInt(form.interest1.value);
+  const interest2 = parseInt(form.interest2.value);
+
+  // 入力チェック
+  if (isNaN(amount) || amount < 500000 || amount > 90000000) {
+    alert("借入金額は50万円〜9,000万円の範囲で入力してください。");
+    return;
+  }
+  if (isNaN(years) || years < 1 || years > 50) {
+    alert("返済期間は1年以上50年以下で入力してください。");
+    return;
+  }
+  if (isNaN(interest1) || isNaN(interest2)) {
+    alert("金利を正しく入力してください。");
+    return;
+  }
+
+  const interest = interest1 + interest2 / 100;
+  if (interest < 0 || interest > 12.25) {
+    alert("金利は0.00％〜12.25％の範囲で入力してください。");
+    return;
+  }
+
+  // 計算処理
+  const monthlyRate = interest / 100 / 12;
+  const monthlyPayment = Math.floor((amount - bonus) * monthlyRate / (1 - Math.pow(1 + monthlyRate, -years * 12)));
+  const monthlyRounded = Math.round(monthlyPayment / 10) * 10;
+
+  const bonusRate = interest / 100 / 2;
+  const bonusPayment = Math.floor(bonus * bonusRate / (1 - Math.pow(1 + bonusRate, -years * 2)));
+  const bonusRounded = Math.round(bonusPayment / 10) * 10;
+
+  // 結果を表示欄に反映
+  form.monthlyResult.value = monthlyRounded.toLocaleString();
+  form.bonusResult.value = bonus > 0 ? bonusRounded.toLocaleString() : "0";
+}
+
+function clearLoan() {
+  const form = document.getElementById("loan-form");
+  form.reset();
+  form.monthlyResult.value = "";
+  form.bonusResult.value = "";
+}
+</script>
+<!-- JavaScriptここまで -->
+
+  <!-- footerここから -->
+  <footer class="footer">
+    <nav class="site-menu">
+      <ul>
+        <li><a href="./concept.html">コンセプト</a></li>
+        <li><a href="./menu.html">メニュー</a></li>
+        <li><a href="./shop.html">ショップ</a></li>
+        <li><a href="./access.html">アクセス・お問い合わせ</a></li>
+        <li><a href="./gaiyo.html">会社概要</a></li>
+      </ul>
+    </nav>
+    <br>
+    <p class="footer-title">有限会社森園建設</p>
+    <p class="footer-tel">TEL 0952-53-2042</p>
+    <p class="footer-time">OPEN Mon-Sun 8:00-20:00</p>
+  </footer>
+  <!-- footerここまで -->
+
+</body>
+
+</html>

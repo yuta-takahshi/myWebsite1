@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ACCESS｜KISSA official website</title>
+  <meta name="description" content="カフェ「KISSA」のアクセスマップと問い合わせフォームが掲載されたページです。">
+  <meta name="viewport" content="width=device-width">
+  <script src="./js/toggle-menu.js"></script>
+  <link href="./css/common.css" rel="stylesheet">
+  <link href="./css/access.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- headerここから -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="header-logo" href="./index.html">
+        <img src="./images/common/logo-header.png" alt="KISSA">
+      </a>
+      <button class="toggle-menu-button"></button>
+      <div class="header-site-menu">
+        <nav class="site-menu">
+          <ul>
+            <li><a href="./concept.html">コンセプト</a></li>
+            <li><a href="./menu.html">事業内容</a></li>
+            <li><a href="./shop.html">施工事例</a></li>
+            <li><a href="./access.html">アクセス・お問い合わせ</a></li>
+             <li><a href="./gaiyo.html">会社概要</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!-- headerここまで -->
+
+  <!-- mainここから -->
+  <main class="main">
+    <div class="title">
+      <h1>アクセス・お問い合わせ</h1>
+      <p>Access・Contact Us</p>
+    </div>
+    <div class="map">
+      <h2>アクセスマップ</h2>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3334.03884277994!2d130.3947928755388!3d33.31779997344231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3541ba076d0606b7%3A0xda29dc4e8d80a459!2z77yI5pyJ77yJ5qOu5ZyS5bu66Kit!5e0!3m2!1sja!2sjp!4v1753591303067!5m2!1sja!2sjp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="contact" id="contact">
+      <h2>お問い合わせフォーム</h2>
+      <!-- ✅ onsubmit属性をEmailJS用に変更 -->
+<form id="contact-form" onsubmit="sendEmail(event)">
+        <dl class="form-area">
+          <dt><span class="required">お名前</span></dt>
+          <dd><input class="input-text" type="text" name="name" required></dd>
+          <dt><span class="required">メールアドレス</span></dt>
+          <dd><input class="input-text" type="email" name="email" required></dd>
+          <dt>お電話番号</dt>
+          <dd><input class="input-text" type="tel" name="tel"></dd>
+          <dt>お問い合わせ種別</dt>
+          <dd>
+            <select class="select-box" name="genre">
+              <option value="新築についてのご相談" selected>新築についてのご相談</option>
+              <option value="リフォームについてのご相談">リフォームについてのご相談</option>
+              <option value="その他">その他</option>
+            </select>
+          </dd>
+          <dt>お客様について</dt>
+          <dd>
+            <label class="radio-button"><input type="radio" name="user-type" value="一般のお客様" checked>一般のお客様</label>
+            <label class="radio-button"><input type="radio" name="user-type" value="お取引先様">お取引先様</label>
+            <label class="radio-button"><input type="radio" name="user-type" value="その他">その他</label>
+          </dd>
+          <dt><span class="required">お問い合わせ内容</span></dt>
+          <dd><textarea class="message" name="message" required></textarea></dd>
+        </dl>
+        <p class="confirm-text">ご入力内容をご確認の上、お間違いがなければ［メールを送信］ボタンを押してください。</p>
+        <button class="submit-button" type="submit">メールを送信</button>
+      </form>
+      <!-- ✅ JavaScript追加（ポップアップ表示） -->
+<!-- ✅ EmailJSのスクリプトを読み込み -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  // ✅ EmailJSの初期化（あなたのユーザーIDに置き換えてください）
+  emailjs.init("cOXVV2J79N5BGB5UC");
+
+  // ✅ フォーム送信処理
+  function sendEmail(e) {
+    e.preventDefault(); // フォーム送信を止める
+
+    emailjs.sendForm("service_v1dls8p", "template_1328l5w", e.target)
+      .then(() => {
+        alert("送信が完了しました。お問い合わせいただきありがとうございます！"); // ✅ ポップアップ通知
+        document.getElementById("contact-form").reset(); // ✅ フォームをリセット（任意）
+      }, (error) => {
+        alert("送信に失敗しました。もう一度お試しください。");
+        console.error(error);
+      });
+  }
+</script>
+    </div>
+  </main>
+  <!-- mainここまで -->
+
+  <!-- footerここから -->
+  <footer class="footer">
+    <nav class="site-menu">
+      <ul>
+        <li><a href="./concept.html">コンセプト</a></li>
+        <li><a href="./menu.html">事業内容</a></li>
+        <li><a href="./shop.html">施工事例</a></li>
+        <li><a href="./access.html">アクセス・お問い合わせ</a></li>
+        <li><a href="./gaiyo.html">会社概要</a></li>
+      </ul>
+    </nav>
+    <br>
+    <p class="footer-title">有限会社森園建設</p>
+    <p class="footer-tel">TEL 0952-53-2042</p>
+    <p class="footer-time">OPEN Mon-Sun 8:00-20:00</p>
+  </footer>
+  <!-- footerここまで -->
+
+</body>
+
+</html>
